@@ -1,0 +1,84 @@
+// Prisma schema for Estate Complaint Management
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  RESIDENT
+  ADMIN
+}
+
+enum ComplaintStatus {
+  NEW
+  PENDING
+  RESOLVED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  role          Role      @default(RESIDENT)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  complaints    Complaint[] @relation("UserComplaints")
+  changes       ComplaintHistory[] @relation("UserChanges")
+  notifications Notification[]
+}
+
+model Complaint {
+  id          String           @id @default(cuid())
+  title       String
+  description String
+  status      ComplaintStatus  @default(NEW)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  residentId  String
+  resident    User             @relation("UserComplaints", fields: [residentId], references: [id])
+
+  history     ComplaintHistory[]
+  attachments Attachment[]
+  notifications Notification[]
+}
+
+model ComplaintHistory {
+  id              String          @id @default(cuid())
+  complaintId     String
+  complaint       Complaint       @relation(fields: [complaintId], references: [id])
+  status          ComplaintStatus
+  feedback        String?
+  comment         String?
+  changedByUserId String
+  changedBy       User            @relation("UserChanges", fields: [changedByUserId], references: [id])
+  createdAt       DateTime        @default(now())
+}
+
+model Attachment {
+  id          String    @id @default(cuid())
+  complaintId String
+  complaint   Complaint @relation(fields: [complaintId], references: [id])
+  filePath    String
+  fileName    String
+  mimeType    String
+  createdAt   DateTime  @default(now())
+}
+
+model Notification {
+  id          String     @id @default(cuid())
+  userId      String
+  user        User       @relation(fields: [userId], references: [id])
+  complaintId String?
+  complaint   Complaint? @relation(fields: [complaintId], references: [id])
+  type        String
+  message     String
+  read        Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+}

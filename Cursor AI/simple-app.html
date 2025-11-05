@@ -20,7 +20,7 @@
         h1 {
             font-size: clamp(2.5rem, 8vw, 4.5rem);
             font-weight: 800;
-            background: linear-gradient(135deg, #ff0066, #ff4d9a, #ff66cc);
+            background: linear-gradient(135deg, #ff7a00, #ffa94d, #ffcc80);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -33,10 +33,10 @@
             font-size: clamp(1.8rem, 5vw, 2.8rem);
             font-weight: 700;
             margin: 30px 0 20px;
-            color: #ff0066;
+            color: #ff7a00;
         }
         
-        h3 { font-size: 1.5rem; margin: 20px 0; color: #ff66cc; }
+        h3 { font-size: 1.5rem; margin: 20px 0; color: #ffcc80; }
         
         .form-group { margin: 20px 0; }
         
@@ -45,7 +45,7 @@
             padding: 16px 20px;
             margin: 10px 0;
             background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 0, 102, 0.3);
+            border: 2px solid rgba(255, 122, 0, 0.3);
             border-radius: 12px;
             color: #ffffff;
             font-size: 16px;
@@ -54,9 +54,9 @@
         
         input:focus, textarea:focus, select:focus {
             outline: none;
-            border-color: #ff0066;
-            background: rgba(255, 0, 102, 0.1);
-            box-shadow: 0 0 20px rgba(255, 0, 102, 0.2);
+            border-color: #ff7a00;
+            background: rgba(255, 122, 0, 0.1);
+            box-shadow: 0 0 20px rgba(255, 122, 0, 0.2);
         }
         
         button {
@@ -76,8 +76,8 @@
         
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(255, 0, 102, 0.4);
-            background: linear-gradient(135deg, #ff1a75, #ff66cc);
+            box-shadow: 0 10px 30px rgba(255, 122, 0, 0.4);
+            background: linear-gradient(135deg, #ff8f33, #ffcc80);
         }
         
         button:active { transform: translateY(0); }
@@ -94,7 +94,7 @@
         
         .card {
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 0, 102, 0.2);
+            border: 1px solid rgba(255, 122, 0, 0.2);
             border-radius: 20px;
             padding: 30px;
             margin: 20px 0;
@@ -111,7 +111,7 @@
         }
         
         th {
-            background: linear-gradient(135deg, #ff0066, #ff4d9a);
+            background: linear-gradient(135deg, #ff7a00, #ffa94d);
             color: white;
             padding: 16px;
             text-align: left;
@@ -124,10 +124,10 @@
         td {
             background: rgba(255, 255, 255, 0.05);
             padding: 16px;
-            border-bottom: 1px solid rgba(255, 0, 102, 0.1);
+            border-bottom: 1px solid rgba(255, 122, 0, 0.1);
         }
         
-        tr:hover td { background: rgba(255, 0, 102, 0.1); }
+        tr:hover td { background: rgba(255, 122, 0, 0.1); }
         
         tr:last-child td { border-bottom: none; }
         
@@ -159,17 +159,17 @@
         }
         
         .summary-box {
-            background: linear-gradient(135deg, rgba(255, 0, 102, 0.2), rgba(255, 102, 204, 0.2));
+            background: linear-gradient(135deg, rgba(255, 122, 0, 0.2), rgba(255, 204, 128, 0.2));
             padding: 24px;
             border-radius: 16px;
-            border: 2px solid rgba(255, 0, 102, 0.3);
+            border: 2px solid rgba(255, 122, 0, 0.3);
             text-align: center;
         }
         
         .summary-box .number {
             font-size: 2.5rem;
             font-weight: 800;
-            color: #ff0066;
+            color: #ff7a00;
             display: block;
             margin-bottom: 8px;
         }
@@ -201,9 +201,9 @@
         .media-preview {
             margin: 15px 0;
             padding: 15px;
-            background: rgba(255, 0, 102, 0.1);
+            background: rgba(255, 122, 0, 0.1);
             border-radius: 12px;
-            border: 2px dashed rgba(255, 0, 102, 0.3);
+            border: 2px dashed rgba(255, 122, 0, 0.3);
         }
         
         .media-preview img {
@@ -228,7 +228,7 @@
             display: block;
         }
         
-        a { color: #ff66cc; text-decoration: none; }
+        a { color: #ffcc80; text-decoration: none; }
         a:hover { text-decoration: underline; }
         
         code {
@@ -237,7 +237,7 @@
             border-radius: 6px;
             font-family: 'Courier New', monospace;
             font-size: 0.9em;
-            color: #ff66cc;
+            color: #ffcc80;
         }
         
          @media (max-width: 768px) {
@@ -280,7 +280,7 @@
              position: absolute;
              top: 10px;
              right: 10px;
-             background: #ff0066;
+             background: #ff7a00;
              color: white;
              border: none;
              padding: 10px 20px;
@@ -291,7 +291,7 @@
          }
          
          .modal-close:hover {
-             background: #ff4d9a;
+             background: #ffa94d;
          }
     </style>
 </head>
@@ -303,7 +303,7 @@
             <div class="card">
                 <h2>Sign Up</h2>
                 <div class="form-group">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #ff66cc;">Role</label>
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #ffcc80;">Role</label>
                     <select id="signup-role" required>
                         <option value="RESIDENT" selected>Resident</option>
                         <option value="ADMIN">Admin</option>
@@ -356,7 +356,7 @@
                     <h2>Submit New Complaint</h2>
                     <form onsubmit="submitComplaint(event)">
                         <div class="form-group">
-                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #ff66cc;">Complaint Category</label>
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #ffcc80;">Complaint Category</label>
                             <select id="complaint-category" required>
                                 <option value="">Select a category...</option>
                                 <option value="Maintenance Issue">Maintenance Issue</option>
@@ -374,11 +374,11 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #ff66cc;">Describe Your Complaint</label>
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #ffcc80;">Describe Your Complaint</label>
                             <textarea id="complaint-description" placeholder="Please provide details about your complaint: when it occurred, the location, what happened, and any other relevant information..." rows="6" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #ff66cc;">Upload Media (Optional)</label>
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #ffcc80;">Upload Media (Optional)</label>
                             <input type="file" id="complaint-media" accept="image/*,video/*" onchange="validateMediaFile(this)">
                             <p style="font-size: 0.85em; opacity: 0.7; margin-top: 5px;">Max 30 seconds for videos, images and videos supported</p>
                         </div>

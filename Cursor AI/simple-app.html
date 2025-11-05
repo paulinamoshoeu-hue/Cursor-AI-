@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estate Complaints - Simple Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff7a00, #ffa94d, #ffcc80);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin: 40px 0;
+            letter-spacing: -0.02em;
+        }
+        
+        h2 {
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-weight: 700;
+            margin: 30px 0 20px;
+            color: #ff7a00;
+        }
+        
+        h3 { font-size: 1.5rem; margin: 20px 0; color: #ffcc80; }
+        
+        .form-group { margin: 20px 0; }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 16px 20px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 122, 0, 0.3);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #ff7a00;
+            background: rgba(255, 122, 0, 0.1);
+            box-shadow: 0 0 20px rgba(255, 122, 0, 0.2);
+        }
+        
+        button {
+            background: linear-gradient(135deg, #ff0066, #ff4d9a);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            margin: 10px 5px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 122, 0, 0.4);
+            background: linear-gradient(135deg, #ff8f33, #ffcc80);
+        }
+        
+        button:active { transform: translateY(0); }
+        
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 30px 0;
+            justify-content: center;
+        }
+        
+        .nav button { width: auto; min-width: 150px; }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 122, 0, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 30px 0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #ff7a00, #ffa94d);
+            color: white;
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 122, 0, 0.1);
+        }
+        
+        tr:hover td { background: rgba(255, 122, 0, 0.1); }
+        
+        tr:last-child td { border-bottom: none; }
+        
+        .hidden { display: none !important; }
+        
+        .error {
+            color: #ff0044;
+            background: rgba(255, 0, 68, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #ff0044;
+        }
+        
+        .success {
+            color: #00ff66;
+            background: rgba(0, 255, 102, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #00ff66;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .summary-box {
+            background: linear-gradient(135deg, rgba(255, 122, 0, 0.2), rgba(255, 204, 128, 0.2));
+            padding: 24px;
+            border-radius: 16px;
+            border: 2px solid rgba(255, 122, 0, 0.3);
+            text-align: center;
+        }
+        
+        .summary-box .number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ff7a00;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .summary-box .label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+        
+        #login-section {
+            max-width: 500px;
+            margin: 100px auto;
+            text-align: center;
+        }
+        
+        select {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            cursor: pointer;
+        }
+        
+        input[type="file"] {
+            padding: 10px;
+            cursor: pointer;
+        }
+        
+        .media-preview {
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 122, 0, 0.1);
+            border-radius: 12px;
+            border: 2px dashed rgba(255, 122, 0, 0.3);
+        }
+        
+        .media-preview img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .media-preview video {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        p { margin: 15px 0; opacity: 0.8; }
+        
+        label {
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        a { color: #ffcc80; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        
+        code {
+            background: rgba(255, 0, 102, 0.15);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #ffcc80;
+        }
+        
+         @media (max-width: 768px) {
+             h1 { font-size: 2rem; }
+             h2 { font-size: 1.5rem; }
+             .nav button { width: 100%; }
+             table { font-size: 0.85rem; }
+             th, td { padding: 10px; }
+         }
+         
+         .modal {
+             display: none;
+             position: fixed;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             background: rgba(0, 0, 0, 0.9);
+             z-index: 1000;
+             justify-content: center;
+             align-items: center;
+         }
+         
+         .modal-content {
+             max-width: 90vw;
+             max-height: 90vh;
+             border-radius: 20px;
+             overflow: hidden;
+             position: relative;
+         }
+         
+         .modal-content img,
+         .modal-content video {
+             max-width: 100%;
+             max-height: 90vh;
+             display: block;
+         }
+         
+         .modal-close {
+             position: absolute;
+             top: 10px;
+             right: 10px;
+             background: #ff7a00;
+             color: white;
+             border: none;
+             padding: 10px 20px;
+             border-radius: 8px;
+             cursor: pointer;
+             font-size: 18px;
+             font-weight: 600;
+         }
+         
+         .modal-close:hover {
+             background: #ffa94d;
+         }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Estate Complaint Management System</h1>
+        
+        <div id="signup-section" class="hidden">
+            <div class="card">
+                <h2>Sign Up</h2>
+                <div class="form-group">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #ffcc80;">Role</label>
+                    <select id="signup-role" required>
+                        <option value="RESIDENT" selected>Resident</option>
+                        <option value="ADMIN">Admin</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="signup-email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="signup-password" placeholder="Password (min 8 chars, letters, numbers, symbols)" required>
+                </div>
+                <div id="password-strength" style="font-size: 12px; margin: 5px 0;"></div>
+                <button onclick="signup()">Create Account</button>
+                <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+            </div>
+        </div>
+
+        <div id="login-section">
+            <div class="card">
+                <h2>Login</h2>
+                <div class="form-group">
+                    <input type="email" id="login-email" placeholder="Email" value="admin@estate.com">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="login-password" placeholder="Password" value="admin123">
+                </div>
+                <button onclick="login()">Login</button>
+                <p>Don't have an account? <a href="#" onclick="showSignup()">Sign Up</a></p>
+                <p style="margin-top: 15px; font-size: 0.85em; opacity: 0.6;">Demo accounts: admin@estate.com / Admin@123 (Admin) | resident@estate.com / Resident@123</p>
+            </div>
+        </div>
+
+         <div id="app-section" class="hidden">
+             <div class="nav" id="nav-buttons">
+                 <button id="resident-nav-btn" class="hidden" onclick="showResidentView()">My Complaints</button>
+                 <button id="admin-nav-btn" class="hidden" onclick="showAdminView()">Admin Dashboard</button>
+                 <button onclick="logout()">Logout</button>
+             </div>
+             
+             <!-- Modal for viewing media -->
+             <div id="media-modal" class="modal" onclick="closeModal()">
+                 <div class="modal-content" onclick="event.stopPropagation()">
+                     <button class="modal-close" onclick="closeModal()">✕ Close</button>
+                     <div id="modal-media-container"></div>
+                 </div>
+             </div>
+
+            <div id="resident-view" class="hidden">
+                <div class="card">
+                    <h2>Submit New Complaint</h2>
+                    <form onsubmit="submitComplaint(event)">
+                        <div class="form-group">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #ffcc80;">Complaint Category</label>
+                            <select id="complaint-category" required>
+                                <option value="">Select a category...</option>
+                                <option value="Maintenance Issue">Maintenance Issue</option>
+                                <option value="Security Concern">Security Concern</option>
+                                <option value="Noise Complaint">Noise Complaint</option>
+                                <option value="Parking Issue">Parking Issue</option>
+                                <option value="Water/Electricity Problem">Water/Electricity Problem</option>
+                                <option value="Building/Property Damage">Building/Property Damage</option>
+                                <option value="Common Area Issue">Common Area Issue</option>
+                                <option value="Neighbor Dispute">Neighbor Dispute</option>
+                                <option value="Pet Related Issue">Pet Related Issue</option>
+                                <option value="Administrative Concern">Administrative Concern</option>
+                                <option value="Landscaping/Grounds">Landscaping/Grounds</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #ffcc80;">Describe Your Complaint</label>
+                            <textarea id="complaint-description" placeholder="Please provide details about your complaint: when it occurred, the location, what happened, and any other relevant information..." rows="6" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #ffcc80;">Upload Media (Optional)</label>
+                            <input type="file" id="complaint-media" accept="image/*,video/*" onchange="validateMediaFile(this)">
+                            <p style="font-size: 0.85em; opacity: 0.7; margin-top: 5px;">Max 30 seconds for videos, images and videos supported</p>
+                        </div>
+                        <div id="media-preview"></div>
+                        <button type="submit">Submit Complaint</button>
+                    </form>
+                </div>
+                <div id="complaints-list"></div>
+            </div>
+
+            <div id="admin-view" class="hidden">
+                <h2>Admin Dashboard</h2>
+                <div id="admin-summary" class="summary-grid"></div>
+                <div class="card">
+                    <button onclick="generateReport()" style="background: linear-gradient(135deg, #00ff66, #66ff99); margin-bottom: 15px;">📊 Generate Complaints Report</button>
+                    <div class="form-group">
+                        <select id="status-filter" onchange="loadComplaints()">
+                            <option value="">All Statuses</option>
+                            <option value="NEW">New</option>
+                            <option value="PENDING">Pending</option>
+                            <option value="RESOLVED">Resolved</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="admin-complaints-list"></div>
+                <div id="category-stats" class="card" style="margin-top: 30px; display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:4000/api';
+        // Toggle this to true to use in-browser mock API without backend
+        let USE_MOCK = true;
+        let currentUser = null;
+        let authToken = null;
+
+        // In-memory mock storage
+        const mockDB = {
+            users: [
+                { id: 'u_admin', email: 'admin@estate.com', password: 'Admin@123', role: 'ADMIN' },
+                { id: 'u_resident', email: 'resident@estate.com', password: 'Resident@123', role: 'RESIDENT' },
+            ],
+            complaints: [],
+            notifications: [],
+            attachments: [],
+        };
+        
+        // Persistence helpers (localStorage)
+        function loadMockDB() {
+            try {
+                const raw = localStorage.getItem('ecm_mockdb');
+                if (!raw) return;
+                const data = JSON.parse(raw);
+                if (data && typeof data === 'object') {
+                    mockDB.users = Array.isArray(data.users) && data.users.length ? data.users : mockDB.users;
+                    mockDB.complaints = Array.isArray(data.complaints) ? data.complaints : [];
+                    mockDB.notifications = Array.isArray(data.notifications) ? data.notifications : [];
+                    mockDB.attachments = Array.isArray(data.attachments) ? data.attachments : [];
+                }
+            } catch {}
+        }
+        function saveMockDB() {
+            try {
+                localStorage.setItem('ecm_mockdb', JSON.stringify({
+                    users: mockDB.users,
+                    complaints: mockDB.complaints,
+                    notifications: mockDB.notifications,
+                    attachments: mockDB.attachments,
+                }));
+            } catch {}
+        }
+        // Initialize from storage on load
+        loadMockDB();
+        
+        // Helper functions
+        function validatePassword(password) {
+            if (password.length < 8) return 'Password must be at least 8 characters';
+            if (!/[a-z]/.test(password)) return 'Password must contain lowercase letters';
+            if (!/[A-Z]/.test(password)) return 'Password must contain uppercase letters';
+            if (!/[0-9]/.test(password)) return 'Password must contain numbers';
+            if (!/[^a-zA-Z0-9]/.test(password)) return 'Password must contain special characters (!@#$%^&*, etc.)';
+            return null;
+        }
+        
+        function showPasswordStrength() {
+            const password = document.getElementById('signup-password');
+            const strengthDiv = document.getElementById('password-strength');
+            if (!password || !strengthDiv) return;
+            
+            const error = validatePassword(password.value);
+            if (password.value.length === 0) {
+                strengthDiv.innerHTML = '';
+                return;
+            }
+            if (error) {
+                strengthDiv.innerHTML = '<span style="color: #ff0044;">❌ ' + error + '</span>';
+            } else {
+                strengthDiv.innerHTML = '<span style="color: #00ff66;">✓ Password is strong</span>';
+            }
+        }
+
+        async function apiCall(endpoint, options = {}) {
+            if (!USE_MOCK) {
+                const url = API_BASE + endpoint;
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(authToken && { 'Authorization': `Bearer ${authToken}` })
+                    },
+                    ...options
+                };
+                const response = await fetch(url, config);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Request failed');
+                return data;
+            }
+            return mockApi(endpoint, options);
+        }
+
+        // Minimal mock API implementation
+        function delay(ms){ return new Promise(r=>setTimeout(r,ms)); }
+        async function mockApi(endpoint, options={}) {
+            await delay(150);
+            const method = (options.method || 'GET').toUpperCase();
+            const body = options.body ? JSON.parse(options.body) : null;
+
+            if (endpoint === '/auth/login' && method === 'POST') {
+                const user = mockDB.users.find(u => u.email === body.email && u.password === body.password);
+                if (!user) throw new Error('Invalid credentials');
+                return { token: 'mock-token', user: { id: user.id, email: user.email, role: user.role } };
+            }
+            if (endpoint === '/auth/register' && method === 'POST') {
+                const pwError = validatePassword(body.password);
+                if (pwError) throw new Error(pwError);
+                if (mockDB.users.some(u => u.email === body.email)) throw new Error('Email already in use');
+                const id = 'u_' + Math.random().toString(36).slice(2,9);
+                mockDB.users.push({ id, email: body.email, password: body.password, role: body.role || 'RESIDENT' });
+                return { id, email: body.email, role: body.role || 'RESIDENT' };
+            }
+
+            if (endpoint === '/complaints' && method === 'GET') {
+                const mine = mockDB.complaints.filter(c => currentUser && c.residentId === currentUser.id)
+                    .sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+                return mine;
+            }
+            if (endpoint === '/complaints' && method === 'POST') {
+                if (!currentUser) throw new Error('Unauthorized');
+                const id = 'c_' + Math.random().toString(36).slice(2,9);
+                const now = new Date().toISOString();
+                const complaint = { 
+                    id, 
+                    title: body.title, 
+                    description: body.description, 
+                    media: body.media || null,
+                    status: 'NEW', 
+                    residentId: currentUser.id, 
+                    createdAt: now 
+                };
+                mockDB.complaints.push(complaint);
+                if (body.media) {
+                    mockDB.attachments.push({ complaintId: id, ...body.media });
+                }
+                saveMockDB();
+                return complaint;
+            }
+
+            if (endpoint.startsWith('/admin/complaints') && method === 'GET') {
+                const url = new URL('http://x' + endpoint);
+                const status = url.searchParams.get('status');
+                let list = [...mockDB.complaints];
+                if (status) list = list.filter(c => c.status === status);
+                return list.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+            }
+            if (/^\/admin\/complaints\/.+\/status$/.test(endpoint) && method === 'PATCH') {
+                const id = endpoint.split('/')[3];
+                const c = mockDB.complaints.find(x => x.id === id);
+                if (!c) throw new Error('Not found');
+                c.status = body.status || c.status;
+                saveMockDB();
+                return c;
+            }
+
+            if (endpoint === '/admin/summary' && method === 'GET') {
+                return {
+                    new: mockDB.complaints.filter(c=>c.status==='NEW').length,
+                    pending: mockDB.complaints.filter(c=>c.status==='PENDING').length,
+                    resolved: mockDB.complaints.filter(c=>c.status==='RESOLVED').length,
+                    totalResidents: mockDB.users.filter(u=>u.role==='RESIDENT').length,
+                };
+            }
+
+            if (endpoint === '/notifications' && method === 'GET') return [];
+
+            throw new Error('Mock endpoint not implemented: ' + method + ' ' + endpoint);
+        }
+
+        async function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            try {
+                const result = await apiCall('/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password })
+                });
+                
+                currentUser = result.user;
+                authToken = result.token;
+                
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('app-section').classList.remove('hidden');
+                
+                // Show/hide navigation buttons based on role
+                const residentBtn = document.getElementById('resident-nav-btn');
+                const adminBtn = document.getElementById('admin-nav-btn');
+                
+                if (currentUser.role === 'ADMIN') {
+                    residentBtn.classList.add('hidden');
+                    adminBtn.classList.remove('hidden');
+                    showAdminView();
+                } else {
+                    residentBtn.classList.remove('hidden');
+                    adminBtn.classList.add('hidden');
+                    showResidentView();
+                }
+            } catch (error) {
+                alert('Login failed: ' + error.message);
+            }
+        }
+
+        async function signup() {
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const role = document.getElementById('signup-role').value;
+            
+            try {
+                await apiCall('/auth/register', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password, role })
+                });
+                saveMockDB();
+                alert('Account created successfully! Please login.');
+                showLogin();
+            } catch (error) {
+                alert('Signup failed: ' + error.message);
+            }
+        }
+        
+        function showSignup() {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('signup-section').classList.remove('hidden');
+            document.getElementById('signup-password').oninput = showPasswordStrength;
+        }
+        
+        function showLogin() {
+            document.getElementById('signup-section').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
+        }
+        
+        function logout() {
+            currentUser = null;
+            authToken = null;
+            document.getElementById('app-section').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('signup-section').classList.add('hidden');
+            document.getElementById('resident-nav-btn').classList.add('hidden');
+            document.getElementById('admin-nav-btn').classList.add('hidden');
+        }
+        
+        function validateMediaFile(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const previewDiv = document.getElementById('media-preview');
+            
+            if (file.type.startsWith('video/')) {
+                if (file.size > 50 * 1024 * 1024) { // 50MB max
+                    alert('Video file too large. Max file size: 50MB');
+                    input.value = '';
+                    previewDiv.innerHTML = '';
+                    return;
+                }
+                
+                const video = document.createElement('video');
+                video.src = URL.createObjectURL(file);
+                video.controls = true;
+                video.style.maxWidth = '100%';
+                video.style.marginTop = '10px';
+                previewDiv.innerHTML = '<div class="media-preview"><strong>Video Preview:</strong>';
+                previewDiv.appendChild(video);
+            } else if (file.type.startsWith('image/')) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.style.maxWidth = '100%';
+                img.style.borderRadius = '8px';
+                img.style.marginTop = '10px';
+                previewDiv.innerHTML = '<div class="media-preview"><strong>Image Preview:</strong>';
+                previewDiv.appendChild(img);
+            } else {
+                alert('Please select an image or video file');
+                input.value = '';
+                previewDiv.innerHTML = '';
+            }
+        }
+        
+        async function generateReport() {
+            const complaints = mockDB.complaints;
+            const categoryStats = {};
+            
+            complaints.forEach(c => {
+                categoryStats[c.title] = (categoryStats[c.title] || 0) + 1;
+            });
+            
+            const statsHtml = `
+                <h3>📊 Complaint Category Statistics</h3>
+                <table>
+                    <tr><th>Category</th><th>Count</th></tr>
+                    ${Object.entries(categoryStats).sort((a,b)=>b[1]-a[1]).map(([cat, count]) => `
+                        <tr>
+                            <td>${cat}</td>
+                            <td><strong>${count}</strong></td>
+                        </tr>
+                    `).join('')}
+                </table>
+            `;
+            
+            document.getElementById('category-stats').innerHTML = statsHtml;
+            document.getElementById('category-stats').style.display = 'block';
+        }
+
+        function showResidentView() {
+            // Only allow residents and admins to access this view
+            if (currentUser && currentUser.role !== 'ADMIN' && currentUser.role !== 'RESIDENT') {
+                alert('Access denied');
+                return;
+            }
+            document.getElementById('resident-view').classList.remove('hidden');
+            document.getElementById('admin-view').classList.add('hidden');
+            loadMyComplaints();
+        }
+
+        function showAdminView() {
+            // Only allow admins to access this view
+            if (currentUser && currentUser.role !== 'ADMIN') {
+                alert('Access denied. Admin privileges required.');
+                logout();
+                return;
+            }
+            document.getElementById('admin-view').classList.remove('hidden');
+            document.getElementById('resident-view').classList.add('hidden');
+            loadAdminData();
+        }
+
+        async function submitComplaint(event) {
+            event.preventDefault();
+            const title = document.getElementById('complaint-category').value;
+            const description = document.getElementById('complaint-description').value;
+            const mediaFile = document.getElementById('complaint-media').files[0];
+            
+            if (!title || !description) {
+                alert('Please fill in both category and description');
+                return;
+            }
+            
+            try {
+                let mediaData = null;
+                if (mediaFile) {
+                    // Convert file to base64 for storage in mock database
+                    const reader = new FileReader();
+                    mediaData = await new Promise((resolve, reject) => {
+                        reader.onload = function(e) {
+                            resolve({
+                                name: mediaFile.name,
+                                type: mediaFile.type,
+                                size: mediaFile.size,
+                                data: e.target.result // base64 data
+                            });
+                        };
+                        reader.onerror = reject;
+                        reader.readAsDataURL(mediaFile);
+                    });
+                }
+                
+                const complaintData = { title, description, media: mediaData };
+                
+                await apiCall('/complaints', {
+                    method: 'POST',
+                    body: JSON.stringify(complaintData)
+                });
+                
+                document.getElementById('complaint-category').value = '';
+                document.getElementById('complaint-description').value = '';
+                document.getElementById('complaint-media').value = '';
+                document.getElementById('media-preview').innerHTML = '';
+                loadMyComplaints();
+                alert('Complaint submitted successfully!');
+            } catch (error) {
+                alert('Failed to submit complaint: ' + error.message);
+            }
+        }
+
+        async function loadMyComplaints() {
+            try {
+                const complaints = await apiCall('/complaints');
+                const list = document.getElementById('complaints-list');
+                
+                if (complaints.length === 0) {
+                    list.innerHTML = '<div class="card"><p>No complaints found. Submit your first complaint above!</p></div>';
+                    return;
+                }
+                
+                let table = '<div class="card"><h3>My Complaints</h3><table><tr><th>Category</th><th>Description</th><th>Status</th><th>Created</th></tr>';
+                complaints.forEach(complaint => {
+                    const statusClass = complaint.status.toLowerCase();
+                    const descPreview = complaint.description.length > 100 
+                        ? complaint.description.substring(0, 100) + '...' 
+                        : complaint.description;
+                    table += `<tr>
+                        <td><strong>${complaint.title}</strong></td>
+                        <td>${descPreview}</td>
+                        <td><span style="padding: 6px 12px; background: rgba(255, 0, 102, 0.2); border-radius: 6px; color: #ff66cc; font-weight: 600;">${complaint.status}</span></td>
+                        <td>${new Date(complaint.createdAt).toLocaleString()}</td>
+                    </tr>`;
+                });
+                table += '</table></div>';
+                list.innerHTML = table;
+            } catch (error) {
+                console.error('Failed to load complaints:', error);
+            }
+        }
+
+        async function loadAdminData() {
+            try {
+                const [summary, complaints] = await Promise.all([
+                    apiCall('/admin/summary'),
+                    apiCall('/admin/complaints')
+                ]);
+                
+                document.getElementById('admin-summary').innerHTML = `
+                    <div class="summary-box">
+                        <span class="number">${summary.new}</span>
+                        <span class="label">New</span>
+                    </div>
+                    <div class="summary-box">
+                        <span class="number">${summary.pending}</span>
+                        <span class="label">Pending</span>
+                    </div>
+                    <div class="summary-box">
+                        <span class="number">${summary.resolved}</span>
+                        <span class="label">Resolved</span>
+                    </div>
+                    <div class="summary-box">
+                        <span class="number">${summary.totalResidents}</span>
+                        <span class="label">Residents</span>
+                    </div>
+                `;
+                
+                loadComplaints();
+            } catch (error) {
+                console.error('Failed to load admin data:', error);
+            }
+        }
+
+        async function loadComplaints() {
+            try {
+                const status = document.getElementById('status-filter').value;
+                const endpoint = status ? `/admin/complaints?status=${status}` : '/admin/complaints';
+                const complaints = await apiCall(endpoint);
+                
+                const list = document.getElementById('admin-complaints-list');
+                if (complaints.length === 0) {
+                    list.innerHTML = '<div class="card"><p>No complaints found.</p></div>';
+                    return;
+                }
+                
+                 let table = '<div class="card"><h3>All Complaints</h3><table><tr><th>Category</th><th>Description</th><th>Status</th><th>Media</th><th>Resident</th><th>Actions</th></tr>';
+                 complaints.forEach(complaint => {
+                     const descPreview = complaint.description.length > 80 
+                         ? complaint.description.substring(0, 80) + '...' 
+                         : complaint.description;
+                     
+                     let mediaCell = '—';
+                     if (complaint.media && complaint.media.data) {
+                         if (complaint.media.type.startsWith('video/')) {
+                             mediaCell = `<button onclick="viewMedia('${complaint.id}')" style="padding: 6px 12px; background: rgba(255, 0, 102, 0.3); border: none; border-radius: 6px; color: white; cursor: pointer;">🎥 View Video</button>`;
+                         } else if (complaint.media.type.startsWith('image/')) {
+                             mediaCell = `<img src="${complaint.media.data}" onclick="viewFullImage('${complaint.media.data}')" style="max-width: 100px; max-height: 100px; border-radius: 8px; cursor: pointer; border: 2px solid rgba(255, 0, 102, 0.3);" />`;
+                         }
+                     }
+                     
+                     table += `<tr>
+                         <td><strong>${complaint.title}</strong></td>
+                         <td>${descPreview}</td>
+                         <td><span style="padding: 6px 12px; background: rgba(255, 0, 102, 0.2); border-radius: 6px; color: #ff66cc; font-weight: 600;">${complaint.status}</span></td>
+                         <td>${mediaCell}</td>
+                         <td><code>${complaint.residentId.substring(0, 8)}...</code></td>
+                         <td>
+                             <select onchange="updateStatus('${complaint.id}', this.value)" style="min-width: 150px;">
+                                 <option value="">Update Status</option>
+                                 <option value="NEW">New</option>
+                                 <option value="PENDING">Pending</option>
+                                 <option value="RESOLVED">Resolved</option>
+                             </select>
+                         </td>
+                     </tr>`;
+                 });
+                table += '</table></div>';
+                list.innerHTML = table;
+            } catch (error) {
+                console.error('Failed to load complaints:', error);
+            }
+        }
+
+        async function updateStatus(complaintId, newStatus) {
+            if (!newStatus) return;
+            
+            try {
+                await apiCall(`/admin/complaints/${complaintId}/status`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ status: newStatus })
+                });
+                
+                loadComplaints();
+                alert('Status updated successfully!');
+            } catch (error) {
+                alert('Failed to update status: ' + error.message);
+            }
+        }
+        
+        function viewMedia(complaintId) {
+            const complaint = mockDB.complaints.find(c => c.id === complaintId);
+            if (!complaint || !complaint.media) return;
+            
+            const modal = document.getElementById('media-modal');
+            const container = document.getElementById('modal-media-container');
+            
+            if (complaint.media.type.startsWith('image/')) {
+                container.innerHTML = `<img src="${complaint.media.data}" style="max-width: 100%; max-height: 90vh;" />`;
+            } else if (complaint.media.type.startsWith('video/')) {
+                container.innerHTML = `<video src="${complaint.media.data}" controls autoplay style="max-width: 100%; max-height: 90vh;"></video>`;
+            }
+            
+            modal.style.display = 'flex';
+        }
+        
+        function viewFullImage(dataUrl) {
+            const modal = document.getElementById('media-modal');
+            const container = document.getElementById('modal-media-container');
+            container.innerHTML = `<img src="${dataUrl}" style="max-width: 100%; max-height: 90vh;" />`;
+            modal.style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('media-modal').style.display = 'none';
+            document.getElementById('modal-media-container').innerHTML = '';
+        }
+
+        // Initialize demo data
+        window.onload = function() {
+            if (!USE_MOCK) createDemoUsers();
+        };
+
+        async function createDemoUsers() {
+            try {
+                // Try to create demo users
+                await apiCall('/auth/register', {
+                    method: 'POST',
+                    body: JSON.stringify({ email: 'admin@estate.com', password: 'admin123' })
+                });
+            } catch (e) {
+                // User might already exist
+            }
+            
+            try {
+                await apiCall('/auth/register', {
+                    method: 'POST',
+                    body: JSON.stringify({ email: 'resident@estate.com', password: 'resident123' })
+                });
+            } catch (e) {
+                // User might already exist
+            }
+        }
+    </script>
+</body>
+</html>
